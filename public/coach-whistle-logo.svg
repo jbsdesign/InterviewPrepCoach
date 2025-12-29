@@ -1,0 +1,44 @@
+<svg
+  width="128"
+  height="128"
+  viewBox="0 0 128 128"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Blue circular background -->
+  <circle cx="64" cy="64" r="56" fill="#0B1120" />
+
+  <!-- Speech bubble base -->
+  <path
+    d="M36 40C36 34.477 40.477 30 46 30H82C87.523 30 92 34.477 92 40V66C92 71.523 87.523 76 82 76H60L50 86L50.5 76H46C40.477 76 36 71.523 36 66V40Z"
+    fill="#3B82F6"
+  />
+
+  <!-- Inner white bubble -->
+  <path
+    d="M42 42C42 38.686 44.686 36 48 36H80C83.314 36 86 38.686 86 42V62C86 65.314 83.314 68 80 68H60.5L54 74L54.3 68H48C44.686 68 42 65.314 42 62V42Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Question mark -->
+  <path
+    d="M61.5 44.5C61.5 42.567 62.36 41.5 64.5 41.5C66.44 41.5 67.5 42.38 67.5 43.9C67.5 45.02 66.98 45.76 65.72 46.44L64.84 46.9C62.74 48.02 61.8 49.34 61.88 51.5L61.9 52H65.2L65.22 51.5C65.28 50.46 65.72 49.84 66.92 49.2L67.86 48.7C69.94 47.58 71 45.92 71 43.78C71 40.66 68.72 38.5 64.6 38.5C60.52 38.5 58.1 40.94 58 44.5H61.5Z"
+    fill="#0F172A"
+  />
+
+  <!-- Dot of question mark -->
+  <circle cx="64.5" cy="56.5" r="2.2" fill="#0F172A" />
+
+  <!-- Subtle bottom label: IPC -->
+  <text
+    x="64"
+    y="104"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-size="10"
+    fill="#9CA3AF"
+    letter-spacing="0.16em"
+  >
+    IPC
+  </text>
+</svg>

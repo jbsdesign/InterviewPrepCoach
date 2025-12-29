@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  password  String
+  name      String?
+  createdAt DateTime     @default(now())
+  profile   UserProfile?
+  roles     Role[]
+}
+
+model UserProfile {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String   @unique
+  fullName        String
+  headline        String?
+  currentRole     String?
+  company         String?
+  yearsExperience Int?
+  location        String?
+  summary         String?
+  extraContext    String?
+  resumeFileName  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Role {
+  id          String          @id @default(cuid())
+  user        User            @relation(fields: [userId], references: [id])
+  userId      String
+  title       String
+  company     String?
+  level       String?
+  description String
+  status      String          @default("active")
+  interviews  RoleInterview[]
+  prepItems   RolePrepItem[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model RoleInterview {
+  id              String   @id @default(cuid())
+  role            Role     @relation(fields: [roleId], references: [id])
+  roleId          String
+  interviewerType String
+  interviewerName String?
+  scheduledAt     DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model RolePrepItem {
+  id        String   @id @default(cuid())
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    String
+  title     String
+  details   String?
+  status    String   @default("not_started")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
