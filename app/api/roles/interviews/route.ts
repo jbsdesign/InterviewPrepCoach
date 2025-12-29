@@ -39,20 +39,20 @@ export async function GET(req: NextRequest) {
   });
 
   return NextResponse.json(
-    {
-      interviews: interviews.map((iv) => ({
-        id: iv.id,
-        roleId: iv.roleId,
-        roleTitle: iv.role.title,
-        company: iv.role.company,
-        interviewerType: iv.interviewerType,
-        interviewerName: iv.interviewerName,
-        scheduledAt: iv.scheduledAt ? iv.scheduledAt.toISOString() : null,
-        notes: iv.notes,
-      })),
-    },
-    { status: 200 },
-  );
+  {
+    interviews: interviews.map((iv: (typeof interviews)[number]) => ({
+      id: iv.id,
+      roleId: iv.roleId,
+      roleTitle: iv.role.title,
+      company: iv.role.company,
+      interviewerType: iv.interviewerType,
+      interviewerName: iv.interviewerName,
+      scheduledAt: iv.scheduledAt ? iv.scheduledAt.toISOString() : null,
+      notes: iv.notes,
+    })),
+  },
+  { status: 200 },
+);
 }
 
 export async function POST(req: NextRequest) {
