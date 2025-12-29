@@ -59,7 +59,7 @@ export default async function RoleDetailPage({
     description: role.description,
   };
 
-  const interviewsForClient = role.interviews.map((iv) => ({
+  const interviewsForClient = role.interviews.map((iv: (typeof role.interviews)[number]) => ({
     id: iv.id,
     interviewerType: iv.interviewerType,
     interviewerName: iv.interviewerName,
@@ -68,7 +68,7 @@ export default async function RoleDetailPage({
     createdAt: iv.createdAt.toISOString(),
   }));
 
-  const prepItemsForClient = role.prepItems.map((item) => ({
+  const prepItemsForClient = role.prepItems.map((item: (typeof role.prepItems)[number]) => ({
     id: item.id,
     title: item.title,
     details: item.details,
