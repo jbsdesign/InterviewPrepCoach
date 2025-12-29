@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { mkdtemp, writeFile, rm } from "node:fs/promises";
-import { execFile } from "node:child_process";
+import { PDFParse } from "pdf-parse";
 
 export const runtime = "nodejs";
 
@@ -162,28 +159,13 @@ export async function POST(req: NextRequest) {
   if (isText) {
     text = await file.text();
   } else if (isPdf) {
-    // Use an external Node helper script so pdf-parse/pdfjs can run in a plain Node context
-    // without Turbopack worker bundling issues.
     try {
-      const tmpDir = await mkdtemp(join(tmpdir(), "ipc-resume-"));
-      const pdfPath = join(tmpDir, file.name || "resume.pdf");
       const arrayBuffer = await file.arrayBuffer();
-      await writeFile(pdfPath, Buffer.from(arrayBuffer));
-
-      const { stdout } = await new Promise<{ stdout: string }>((resolve, reject) => {
-        execFile("node", ["scripts/parse-pdf-cli.mjs", pdfPath], (error, stdout, stderr) => {
-          if (error) {
-            reject(new Error(stderr || error.message));
-            return;
-          }
-          resolve({ stdout });
-        });
-      });
-
-      text = stdout;
-
-      // Best-effort cleanup of the temp file/directory.
-      await rm(tmpDir, { recursive: true, force: true }).catch(() => {});
+      const buffer = Buffer.from(arrayBuffer);
+      const parser = new PDFParse({ data: buffer });
+      const result = await parser.getText();
+      await parser.destroy?.();
+      text = result.text || "";
     } catch (error) {
       const message =
         error instanceof Error
