@@ -92,7 +92,7 @@ export default async function DashboardPage() {
         </section>
 
         <RolesSection
-          initialRoles={(roles ?? []).map((role) => ({
+          initialRoles={(roles ?? []).map((role: (NonNullable<typeof roles>)[number]) => ({
             id: role.id,
             title: role.title,
             company: role.company,
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
             status: role.status,
             createdAt: role.createdAt.toISOString(),
           }))}
-          initialUpcomingInterviews={upcomingInterviews.map((iv) => ({
+          initialUpcomingInterviews={upcomingInterviews.map((iv: (typeof upcomingInterviews)[number]) => ({
             id: iv.id,
             roleId: iv.roleId,
             roleTitle: iv.role.title,
