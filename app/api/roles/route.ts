@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     {
-      roles: roles.map((role) => ({
+      roles: roles.map((role: (typeof roles)[number]) => ({
         id: role.id,
         title: role.title,
         company: role.company,
