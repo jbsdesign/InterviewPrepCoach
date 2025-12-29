@@ -45,7 +45,7 @@ export async function GET(
 
   return NextResponse.json(
     {
-      prepItems: items.map((item) => ({
+      prepItems: items.map((item: (typeof items)[number]) => ({
         id: item.id,
         title: item.title,
         details: item.details,
