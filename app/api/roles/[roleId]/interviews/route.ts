@@ -40,7 +40,7 @@ export async function GET(
 
   return NextResponse.json(
     {
-      interviews: interviews.map((i) => ({
+      interviews: interviews.map((i: (typeof interviews)[number]) => ({
         id: i.id,
         interviewerType: i.interviewerType,
         interviewerName: i.interviewerName,
