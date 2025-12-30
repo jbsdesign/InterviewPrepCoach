@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
 export const runtime = "nodejs";
@@ -12,6 +12,8 @@ type HistoryItem = {
 export async function POST(request: NextRequest) {
   // Look up the current user's profile so the interviewer can be aware of
   // their background, resume, and any extra context they have shared.
+  const prisma = getPrisma();
+
   let profile: {
     fullName: string;
     headline: string | null;

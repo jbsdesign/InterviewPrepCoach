@@ -7,17 +7,17 @@ const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
 };
 
-const adapter = new PrismaBetterSqlite3({
-  url: "file:./prisma/dev.db",
-});
+export function getPrisma(): PrismaClient {
+  if (!globalForPrisma.prisma) {
+    const adapter = new PrismaBetterSqlite3({
+      url: "file:./prisma/dev.db",
+    });
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    adapter,
-    log: ["error", "warn"],
-  });
+    globalForPrisma.prisma = new PrismaClient({
+      adapter,
+      log: ["error", "warn"],
+    });
+  }
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+  return globalForPrisma.prisma;
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
 async function getCurrentUserId(req: NextRequest): Promise<string | null> {
@@ -16,6 +16,7 @@ export async function GET(
   req: NextRequest,
   context: { params: Promise<{ roleId: string }> },
 ) {
+  const prisma = getPrisma();
   const { roleId } = await context.params;
   const userId = await getCurrentUserId(req);
 
@@ -57,6 +58,7 @@ export async function POST(
   req: NextRequest,
   context: { params: Promise<{ roleId: string }> },
 ) {
+  const prisma = getPrisma();
   const { roleId } = await context.params;
   const userId = await getCurrentUserId(req);
 

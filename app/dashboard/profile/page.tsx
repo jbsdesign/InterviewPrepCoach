@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
@@ -8,6 +8,7 @@ import { ProfileDocumentsClient } from "./ProfileDocumentsClient";
 import { UserMenu } from "../UserMenu";
 
 export default async function ProfilePage() {
+  const prisma = getPrisma();
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 

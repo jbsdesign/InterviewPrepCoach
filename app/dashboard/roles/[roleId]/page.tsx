@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { RoleDetailClient } from "../RoleDetailClient";
 import { UserMenu } from "../../UserMenu";
@@ -11,6 +11,7 @@ export default async function RoleDetailPage({
 }: {
   params: Promise<{ roleId: string }>;
 }) {
+  const prisma = getPrisma();
   const { roleId } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;

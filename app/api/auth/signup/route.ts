@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/passwords";
 import { AUTH_COOKIE_NAME, createSessionToken } from "@/lib/auth";
 
@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
   const normalizedName = name.trim();
 
   try {
+    const prisma = getPrisma();
     const existing = await prisma.user.findUnique({
       where: { email: normalizedEmail },
       select: { id: true },

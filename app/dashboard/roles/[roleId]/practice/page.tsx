@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { UserMenu } from "../../../UserMenu";
 import { PracticeInterviewClient } from "../../PracticeInterviewClient";
@@ -12,6 +12,7 @@ export default async function PracticeInterviewPage({
   params: Promise<{ roleId: string }>;
   searchParams: Promise<{ interviewId?: string }>;
 }) {
+  const prisma = getPrisma();
   const [{ roleId }, search] = await Promise.all([params, searchParams]);
   const interviewId = search?.interviewId ?? undefined;
   const cookieStore = await cookies();

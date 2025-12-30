@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
 async function getCurrentUserId(req: NextRequest): Promise<string | null> {
@@ -13,6 +13,7 @@ async function getCurrentUserId(req: NextRequest): Promise<string | null> {
 }
 
 export async function POST(req: NextRequest) {
+  const prisma = getPrisma();
   const userId = await getCurrentUserId(req);
 
   if (!userId) {
@@ -100,6 +101,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const prisma = getPrisma();
   const userId = await getCurrentUserId(req);
 
   if (!userId) {
@@ -207,6 +209,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  const prisma = getPrisma();
   const userId = await getCurrentUserId(req);
 
   if (!userId) {

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {
+    const prisma = getPrisma();
     const token = req.cookies.get(AUTH_COOKIE_NAME)?.value;
 
     if (!token) {

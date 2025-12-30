@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/passwords";
 import { AUTH_COOKIE_NAME, createSessionToken } from "@/lib/auth";
 
@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   const normalizedEmail = email.trim().toLowerCase();
 
   try {
+    const prisma = getPrisma();
     const user = await prisma.user.findUnique({
       where: { email: normalizedEmail },
     });

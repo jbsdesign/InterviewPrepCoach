@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { OnboardingWizard } from "./OnboardingWizard";
 import { UserMenu } from "./UserMenu";
 import { RolesSection } from "./RolesSection";
 
 export default async function DashboardPage() {
+  const prisma = getPrisma();
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
