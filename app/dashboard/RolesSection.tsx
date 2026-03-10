@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -88,16 +89,9 @@ export function RolesSection({
     UpcomingInterviewSummary[]
   >(() => initialUpcomingInterviews);
   const [newRoleId, setNewRoleId] = useState<string | null>(null);
-  const [transitionRole, setTransitionRole] = useState<
-    | {
-        id: string;
-        top: number;
-        left: number;
-        width: number;
-        height: number;
-      }
-    | null
-  >(null);
+  // We previously used a grow-to-fullscreen overlay when opening a role.
+  // That animation started to feel off-center after layout changes, so for now
+  // we navigate directly without that extra layer.
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   // Modal state for adding interviews
@@ -121,6 +115,11 @@ export function RolesSection({
   const [notesModalInterviewId, setNotesModalInterviewId] = useState<string | null>(null);
 
   const hasRoles = roles.length > 0;
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Hydrate interviews for existing roles when the component mounts.
   useEffect(() => {
@@ -231,7 +230,7 @@ export function RolesSection({
     };
 
     if (!response.ok || !data.success || !data.role) {
-      setError(data.error || "Unable to create role. Please try again.");
+      setError(data.error || "We could not create this role. Please try again.");
       return null;
     }
 
@@ -255,7 +254,7 @@ export function RolesSection({
       setIsAdding(false);
     } catch {
       if (!error) {
-        setError("Unable to create role. Please try again.");
+        setError("We could not create this role. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
@@ -286,7 +285,7 @@ export function RolesSection({
       setModalAddedCount(0);
     } catch {
       if (!error) {
-        setError("Unable to create role. Please try again.");
+        setError("We could not create this role. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
@@ -511,14 +510,13 @@ export function RolesSection({
   }
 
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-sm dark:bg-zinc-950">
+    <section className="rounded-3xl border border-zinc-200/80 bg-white/80 p-6 shadow-sm shadow-zinc-900/5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-950/80">
       <div className="mb-4">
         <h2 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
           Roles
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Add roles you’re interviewing for so we can organize interviewers and
-          prep around each one.
+        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+          Add roles you are interviewing for so we can keep interviewers, practice sessions, and notes organized around each one.
         </p>
       </div>
 
@@ -549,7 +547,7 @@ export function RolesSection({
                   {/* internal organic gradient motion, clipped to card */}
                   <motion.div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(56,189,248,0.3),transparent_55%)] opacity-0"
+                    className="pointer-events-none absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.45),transparent_55%),radial-gradient(circle_at_bottom,_rgba(56,189,248,0.3),transparent_55%)] opacity-0"
                     initial={false}
                     animate={
                       isAddHovered && !isAdding
@@ -576,7 +574,7 @@ export function RolesSection({
 
                   <div className="flex-[0.8]" />
                   <div className="relative z-10 flex flex-col items-center gap-2">
-                    <span className="text-6xl font-black leading-none text-blue-600 dark:text-blue-400">
+                    <span className="text-6xl font-black leading-none bg-[linear-gradient(to_right,#335c81,#6ba6c9)] bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(15,23,42,0.45)]">
                       +
                     </span>
                     <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -657,7 +655,7 @@ export function RolesSection({
                         setIsAdding(false);
                         setError(null);
                       }}
-                      className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                      className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
                     >
                       Cancel
                     </button>
@@ -665,14 +663,14 @@ export function RolesSection({
                       type="button"
                       onClick={handleCreateRoleAndAddInterviews}
                       disabled={isSubmitting}
-                      className="rounded-md bg-zinc-800 px-3 py-1.5 text-[11px] font-medium text-zinc-50 hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                      className="rounded-full bg-[linear-gradient(to_right,#3b587a,#4f6f92)] px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_6px_18px_rgba(15,23,42,0.3)] ring-1 ring-slate-200/70 transition transform hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(15,23,42,0.4)] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[linear-gradient(to_right,#020617,#111827)] dark:ring-zinc-700"
                     >
                       {isSubmitting ? "Saving..." : "Add interviews"}
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="rounded-md bg-zinc-900 px-3 py-1.5 text-[11px] font-medium text-zinc-50 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                      className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-800 shadow-sm transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
                     >
                       {isSubmitting ? "Saving..." : "Save role"}
                     </button>
@@ -734,23 +732,7 @@ export function RolesSection({
                 }
               }}
               onClick={() => {
-                const element = cardRefs.current[role.id];
-                if (element && typeof window !== "undefined") {
-                  const rect = element.getBoundingClientRect();
-                  setTransitionRole({
-                    id: role.id,
-                    top: rect.top + window.scrollY,
-                    left: rect.left + window.scrollX,
-                    width: rect.width,
-                    height: rect.height,
-                  });
-
-                  window.setTimeout(() => {
-                    router.push(`/dashboard/roles/${role.id}`);
-                  }, 240);
-                } else {
-                  router.push(`/dashboard/roles/${role.id}`);
-                }
+                router.push(`/dashboard/roles/${role.id}`);
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -773,6 +755,19 @@ export function RolesSection({
                       </span>
                     )}
                   </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                    <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-700 ring-1 ring-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:ring-zinc-700">
+                      <span className="mr-1 h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
+                      {role.status}
+                    </span>
+                    <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                      Added{" "}
+                      {new Date(role.createdAt).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -858,7 +853,7 @@ export function RolesSection({
                     </p>
                   )}
 
-                  <div className="mt-auto pt-2 flex flex-row gap-2">
+                  <div className="mt-auto flex flex-row gap-2 pt-2">
                     <button
                       type="button"
                       onClick={(event) => {
@@ -872,7 +867,7 @@ export function RolesSection({
                         setModalError(null);
                         setModalAddedCount(0);
                       }}
-                      className="flex-1 rounded-md bg-zinc-900 px-3 py-1.5 text-[10px] font-semibold text-zinc-50 shadow-sm transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus-visible:ring-offset-zinc-900"
+className="flex-1 rounded-full bg-[linear-gradient(to_right,#3b587a,#4f6f92)] px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_6px_18px_rgba(15,23,42,0.3)] ring-1 ring-slate-200/70 transition transform hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(15,23,42,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-1 focus-visible:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[linear-gradient(to_right,#020617,#111827)] dark:ring-zinc-700 dark:focus-visible:ring-offset-zinc-900"
                     >
                       Add interviews
                     </button>
@@ -901,7 +896,7 @@ export function RolesSection({
                       disabled={
                         !upcomingInterviews.some((iv) => iv.roleId === role.id)
                       }
-                      className="flex-1 rounded-md bg-zinc-200 px-3 py-1.5 text-[10px] font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-300 disabled:cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-600"
+                      className="flex-1 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-[10px] font-semibold text-sky-800 shadow-sm transition-colors hover:bg-sky-100 disabled:cursor-not-allowed disabled:border-zinc-300 disabled:bg-zinc-200 disabled:text-zinc-500 dark:border-sky-400/60 dark:bg-sky-400/10 dark:text-sky-200 dark:hover:bg-sky-400/20 dark:disabled:border-zinc-700 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-500"
                     >
                       View next interview
                     </button>
@@ -914,31 +909,7 @@ export function RolesSection({
       </div>
 
       <AnimatePresence>
-        {transitionRole && (
-          <motion.div
-            key="role-grow-overlay"
-            initial={{
-              top: transitionRole.top,
-              left: transitionRole.left,
-              width: transitionRole.width,
-              height: transitionRole.height,
-              borderRadius: 16,
-              opacity: 1,
-            }}
-            animate={{
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              borderRadius: 0,
-              opacity: 1,
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[950] bg-white shadow-2xl dark:bg-zinc-950"
-            style={{ position: "fixed" }}
-          />
-        )}
+        {/* Transition overlay removed for now to avoid off-center animation */}
       </AnimatePresence>
 
       {upcomingInterviews.length > 0 && (
@@ -948,7 +919,8 @@ export function RolesSection({
           </h3>
 
           <div className="space-y-2">
-            {upcomingInterviews.map((iv) => {
+            {upcomingInterviews.map((iv, index) => {
+              const isNext = index === 0;
               const dateObj = new Date(iv.scheduledAt);
               const day = dateObj.toLocaleDateString(undefined, {
                 day: "numeric",
@@ -962,6 +934,13 @@ export function RolesSection({
               });
 
               const hasNotes = typeof iv.notes === "string" && iv.notes.trim() !== "";
+              const isHighlighted = highlightedUpcomingId === iv.id;
+
+              const rowClasses = isHighlighted
+                ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/40"
+                : isNext
+                ? "border-sky-300/80 bg-sky-50/90 dark:border-sky-400/70 dark:bg-sky-950/40"
+                : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900";
 
               return (
                 <div
@@ -971,15 +950,11 @@ export function RolesSection({
                       upcomingRowRefs.current[iv.id] = element;
                     }
                   }}
-                  className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs shadow-sm transition-colors ${
-                    highlightedUpcomingId === iv.id
-                      ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/40"
-                      : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
-                  }`}
+                  className={`flex items-center justify-between rounded-2xl border px-3 py-2 text-xs shadow-sm transition-colors ${rowClasses}`}
                 >
                   <div className="flex w-full items-start gap-3 sm:gap-4 md:gap-6">
                     {/* Column 1: date pill */}
-                    <div className="flex flex-col items-center justify-center rounded-lg bg-zinc-900 px-2 py-1 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900 shrink-0 mr-2 sm:mr-0">
+                    <div className="mr-2 flex shrink-0 flex-col items-center justify-center rounded-lg bg-zinc-900 px-2 py-1 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900 sm:mr-0">
                       <span className="text-lg font-bold leading-tight">
                         {day}
                       </span>
@@ -989,7 +964,12 @@ export function RolesSection({
                     </div>
 
                     {/* Column 2: company / role / time */}
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
+                      {isNext && (
+                        <span className="mb-1 inline-flex rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-medium text-sky-800 ring-1 ring-sky-200 dark:bg-sky-400/10 dark:text-sky-200 dark:ring-sky-400/40">
+                          Next interview
+                        </span>
+                      )}
                       <p className="text-[11px] font-semibold text-zinc-900 dark:text-zinc-50">
                         {iv.company || "Company"}
                       </p>
@@ -1025,7 +1005,7 @@ export function RolesSection({
                     )}
 
                     {/* Column 4: AI interview button */}
-                    <div className="ml-2 flex flex-col items-end gap-1">
+                    <div className="ml-2 flex min-w-[150px] flex-col items-end gap-1">
                       <button
                         type="button"
                         onClick={() =>
@@ -1033,9 +1013,9 @@ export function RolesSection({
                             `/dashboard/roles/${iv.roleId}/practice?interviewId=${iv.id}`,
                           )
                         }
-                        className="rounded-md bg-blue-600 px-3 py-1.5 text-[10px] font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-900"
+className="w-full rounded-full bg-[linear-gradient(to_right,#3b587a,#4f6f92)] px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_6px_18px_rgba(15,23,42,0.3)] ring-1 ring-slate-200/70 transition transform hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(15,23,42,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:bg-[linear-gradient(to_right,#020617,#111827)] dark:ring-zinc-700 dark:focus-visible:ring-offset-zinc-900"
                       >
-                        AI interview
+                        Start AI interview
                       </button>
                     </div>
                   </div>
@@ -1045,249 +1025,273 @@ export function RolesSection({
           </div>
         </section>
       )}
-      {notesModalInterviewId && (
-        <AnimatePresence>
-          <motion.div
-            key="notes-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/50"
-          >
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 text-xs shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
-            >
-              {(() => {
-                const match = upcomingInterviews.find((iv) => iv.id === notesModalInterviewId);
-                const notesText = match?.notes?.trim() ?? "";
-                return (
-                  <>
-                    <div className="mb-2 flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                          Interview notes and feedback
-                        </h2>
-                        {match && (
-                          <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
-                            {match.company || "Company"} · {match.roleTitle}
-                            {match.interviewerName
-                              ? ` · ${match.interviewerName} (${match.interviewerType})`
-                              : ""}
+      {notesModalInterviewId && isMounted
+        ? createPortal(
+            <AnimatePresence>
+              <motion.div
+                key="notes-modal"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[1100] flex min-h-screen w-screen items-center justify-center bg-black/55"
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0, y: 8 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.96, opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 text-xs shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  {(() => {
+                    const match = upcomingInterviews.find(
+                      (iv) => iv.id === notesModalInterviewId,
+                    );
+                    const notesText = match?.notes?.trim() ?? "";
+                    return (
+                      <>
+                        <div className="mb-2 flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                              Interview notes and feedback
+                            </h2>
+                            {match && (
+                              <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
+                                {match.company || "Company"} · {match.roleTitle}
+                                {match.interviewerName
+                                  ? ` · ${match.interviewerName} (${match.interviewerType})`
+                                  : ""}
+                              </p>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setNotesModalInterviewId(null)}
+                            aria-label="Close notes"
+                            className="-mt-1 -mr-1 inline-flex h-6 w-6 items-center justify-center text-lg font-black leading-none text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300"
+                          >
+                            ×
+                          </button>
+                        </div>
+
+                        {notesText ? (
+                          <div className="mt-2 max-h-64 overflow-y-auto rounded-md bg-zinc-50 p-3 text-[11px] leading-relaxed text-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-100">
+                            {notesText}
+                          </div>
+                        ) : (
+                          <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                            There are no saved notes for this interview yet.
                           </p>
                         )}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setNotesModalInterviewId(null)}
-                        aria-label="Close notes"
-                        className="-mt-1 -mr-1 inline-flex h-6 w-6 items-center justify-center text-lg font-black leading-none text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300"
-                      >
-                        ×
-                      </button>
+                      </>
+                    );
+                  })()}
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
+
+      {modalRoleId && isMounted
+        ? createPortal(
+            <AnimatePresence>
+              <motion.div
+                key="add-interviews-modal"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[1000] flex min-h-screen w-screen items-center justify-center bg-black/55"
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0, y: 8 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.96, opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 text-xs shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <div>
+                      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                        Add interviews
+                      </h2>
+                      <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
+                        Add one or more upcoming interviews for this role. You can keep adding
+                        interviews, then click Done when you are finished.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setModalRoleId(null);
+                        setModalError(null);
+                        setModalAddedCount(0);
+                      }}
+                      aria-label="Close"
+                      className="-mt-2 -mr-2 inline-flex h-6 w-6 items-center justify-center text-lg font-black leading-none text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      if (!modalRoleId) return;
+                      void handleAddInterview(modalRoleId, {
+                        name: modalName,
+                        type: modalTypeIsCustom ? modalTypeCustom : modalType,
+                        date: modalDate,
+                        time: modalTime,
+                        notes: modalNotes,
+                        fromModal: true,
+                      });
+                    }}
+                    className="space-y-3"
+                  >
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
+                        Interviewer name
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                        value={modalName}
+                        onChange={(event) => setModalName(event.target.value)}
+                      />
                     </div>
 
-                    {notesText ? (
-                      <div className="mt-2 max-h-64 overflow-y-auto rounded-md bg-zinc-50 p-3 text-[11px] leading-relaxed text-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-100">
-                        {notesText}
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
+                        Interviewer role
+                      </label>
+                      <select
+                        className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                        value={modalTypeIsCustom ? "__custom" : modalType}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          if (value === "__custom") {
+                            setModalTypeIsCustom(true);
+                            setModalType("");
+                          } else {
+                            setModalTypeIsCustom(false);
+                            setModalType(value);
+                          }
+                        }}
+                      >
+                        <option value="">Select a role</option>
+                        <option value="Hiring Manager">Hiring Manager</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="Designer">Designer</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Recruiter">Recruiter</option>
+                        <option value="Director">Director</option>
+                        <option value="VP">VP</option>
+                        <option value="CEO">CEO</option>
+                        <option value="CTO">CTO</option>
+                        <option value="__custom">Add manually…</option>
+                      </select>
+                      {modalTypeIsCustom && (
+                        <input
+                          type="text"
+                          className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                          placeholder="Type interviewer role"
+                          value={modalTypeCustom}
+                          onChange={(event) => setModalTypeCustom(event.target.value)}
+                        />
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
+                          Date
+                        </label>
+                        <input
+                          type="date"
+                          className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                          value={modalDate}
+                          onChange={(event) => setModalDate(event.target.value)}
+                          onClick={(event) => {
+                            const input = event.currentTarget as HTMLInputElement & {
+                              showPicker?: () => void;
+                            };
+                            if (typeof input.showPicker === "function") {
+                              input.showPicker();
+                            }
+                          }}
+                        />
                       </div>
-                    ) : (
-                      <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
-                        There are no saved notes for this interview yet.
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
+                          Time
+                        </label>
+                        <input
+                          type="time"
+                          className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                          value={modalTime}
+                          onChange={(event) => setModalTime(event.target.value)}
+                          onClick={(event) => {
+                            const input = event.currentTarget as HTMLInputElement & {
+                              showPicker?: () => void;
+                            };
+                            if (typeof input.showPicker === "function") {
+                              input.showPicker();
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
+                        Notes (optional)
+                      </label>
+                      <textarea
+                        rows={2}
+                        className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
+                        value={modalNotes}
+                        onChange={(event) => setModalNotes(event.target.value)}
+                      />
+                    </div>
+
+                    {modalError && (
+                      <p className="text-[10px] text-red-600 dark:text-red-400">{modalError}</p>
+                    )}
+                    {modalAddedCount > 0 && !modalError && (
+                      <p className="text-[10px] text-emerald-600 dark:text-emerald-400">
+                        {modalAddedCount === 1
+                          ? "1 interview added."
+                          : `${modalAddedCount} interviews added.`}
                       </p>
                     )}
-                  </>
-                );
-              })()}
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
-      )}
 
-      {modalRoleId && (
-        <AnimatePresence>
-          <motion.div
-            key="add-interviews-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50"
-          >
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 text-xs shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
-            >
-              <div className="mb-2 flex items-start justify-between gap-2">
-                <div>
-                  <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                    Add interviews
-                  </h2>
-                  <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
-                    Add one or more upcoming interviews for this role. You can keep adding
-                    interviews, then click Done when you are finished.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setModalRoleId(null);
-                    setModalError(null);
-                    setModalAddedCount(0);
-                  }}
-                  aria-label="Close"
-                  className="-mt-2 -mr-2 inline-flex h-6 w-6 items-center justify-center text-lg font-black leading-none text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300"
-                >
-                  ×
-                </button>
-              </div>
-
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (!modalRoleId) return;
-                  void handleAddInterview(modalRoleId, {
-                    name: modalName,
-                    type: modalTypeIsCustom ? modalTypeCustom : modalType,
-                    date: modalDate,
-                    time: modalTime,
-                    notes: modalNotes,
-                    fromModal: true,
-                  });
-                }}
-                className="space-y-3"
-              >
-                <div className="space-y-1">
-                  <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
-                    Interviewer name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                    value={modalName}
-                    onChange={(event) => setModalName(event.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
-                    Interviewer role
-                  </label>
-                  <select
-                    className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                    value={modalTypeIsCustom ? "__custom" : modalType}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      if (value === "__custom") {
-                        setModalTypeIsCustom(true);
-                        setModalType("");
-                      } else {
-                        setModalTypeIsCustom(false);
-                        setModalType(value);
-                      }
-                    }}
-                  >
-                    <option value="">Select a role</option>
-                    <option value="Hiring Manager">Hiring Manager</option>
-                    <option value="Product Manager">Product Manager</option>
-                    <option value="Designer">Designer</option>
-                    <option value="Developer">Developer</option>
-                    <option value="Recruiter">Recruiter</option>
-                    <option value="Director">Director</option>
-                    <option value="VP">VP</option>
-                    <option value="CEO">CEO</option>
-                    <option value="CTO">CTO</option>
-                    <option value="__custom">Add manually…</option>
-                  </select>
-                  {modalTypeIsCustom && (
-                    <input
-                      type="text"
-                      className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                      placeholder="Type interviewer role"
-                      value={modalTypeCustom}
-                      onChange={(event) => setModalTypeCustom(event.target.value)}
-                    />
-                  )}
-                </div>
-
-                <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
-                  <div className="space-y-1">
-                    <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
-                      Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                      value={modalDate}
-                      onChange={(event) => setModalDate(event.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
-                      Time
-                    </label>
-                    <input
-                      type="time"
-                      className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                      value={modalTime}
-                      onChange={(event) => setModalTime(event.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[10px] font-medium text-zinc-800 dark:text-zinc-200">
-                    Notes (optional)
-                  </label>
-                  <textarea
-                    rows={2}
-                    className="w-full rounded-md border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm outline-none ring-0 transition focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800"
-                    value={modalNotes}
-                    onChange={(event) => setModalNotes(event.target.value)}
-                  />
-                </div>
-
-                {modalError && (
-                  <p className="text-[10px] text-red-600 dark:text-red-400">{modalError}</p>
-                )}
-                {modalAddedCount > 0 && !modalError && (
-                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400">
-                    {modalAddedCount === 1
-                      ? "1 interview added."
-                      : `${modalAddedCount} interviews added.`}
-                  </p>
-                )}
-
-                <div className="mt-2 flex items-center justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setModalRoleId(null);
-                      setModalError(null);
-                      setModalAddedCount(0);
-                    }}
-                    className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
-                  >
-                    Done
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={modalIsSubmitting}
-                    className="rounded-md bg-zinc-900 px-3 py-1.5 text-[11px] font-medium text-zinc-50 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-                  >
-                    {modalIsSubmitting ? "Adding..." : "Add interview"}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
-      )}
+                    <div className="mt-2 flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalRoleId(null);
+                          setModalError(null);
+                          setModalAddedCount(0);
+                        }}
+                        className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                      >
+                        Done
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={modalIsSubmitting}
+                        className="rounded-md bg-zinc-900 px-3 py-1.5 text-[11px] font-medium text-zinc-50 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                      >
+                        {modalIsSubmitting ? "Adding..." : "Add interview"}
+                      </button>
+                    </div>
+                  </form>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Josh Sternberg - Resume - Senior UX Design Leader</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.38;
+      color: #111827;
+      background: #f4f5f7;
+      padding: 32px 16px;
+      margin: 0;
+    }
+    .resume {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 26px 40px 28px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border-radius: 6px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    header {
+      border-bottom: 2px solid #111827;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .resume-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+    }
+    .header-main { flex: 2; }
+    .header-contact { flex: 1.4; text-align: right; }
+    h1 {
+      font-size: 32px;
+      color: #111827;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      font-size: 15px;
+      color: #4b5563;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+    .contact-info {
+      font-size: 11.5px;
+      color: #6b7280;
+      line-height: 1.35;
+    }
+    .contact-info a { color: #2563eb; text-decoration: none; }
+    .contact-info a:hover { text-decoration: underline; }
+    .contact-info br { line-height: 1.6; }
+    section { margin-bottom: 12px; }
+    h2 {
+      font-size: 17px;
+      color: #111827;
+      font-weight: 700;
+      margin-bottom: 8px;
+      margin-top: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+    }
+    .summary {
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #374151;
+      margin-bottom: 0;
+    }
+    .job { margin-bottom: 14px; }
+    .job-header { margin-bottom: 5px; }
+    .company-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+    .job-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 8px;
+      margin-bottom: 1px;
+    }
+    .job-details {
+      font-size: 12px;
+      color: #6b7280;
+      font-style: italic;
+    }
+    ul { list-style: none; margin-top: 5px; }
+    li {
+      position: relative;
+      padding-left: 15px;
+      margin-bottom: 2px;
+      font-size: 12px;
+      line-height: 1.38;
+      color: #374151;
+    }
+    li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #2563eb;
+      font-weight: bold;
+    }
+    .subsection { margin-bottom: 11px; }
+    .subsection-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+    .patent { margin-bottom: 7px; }
+    .patent-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    .patent-details {
+      font-size: 10.5px;
+      color: #6b7280;
+      margin-bottom: 2px;
+    }
+    .skills-compact {
+      font-size: 10.5px;
+      line-height: 1.4;
+    }
+    .skills-compact div { margin-bottom: 3px; color: #374151; }
+    .skills-compact strong { color: #111827; font-weight: 600; }
+    .education { margin-bottom: 5px; }
+    .education-school {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 6px;
+      margin-bottom: 1px;
+    }
+    .education-degree {
+      font-size: 11.5px;
+      color: #4b5563;
+      margin-bottom: 1px;
+    }
+    .education-years {
+      font-size: 10.5px;
+      color: #6b7280;
+    }
+    @media (max-width: 700px) {
+      body { padding: 16px 8px; }
+      .resume {
+        padding: 18px 18px 20px;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .resume-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .header-contact { text-align: left; }
+    }
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 8px 16px;
+        line-height: 1.24;
+      }
+      .resume {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 10px 22px 12px;
+      }
+      section { margin-bottom: 8px; }
+      .job { margin-bottom: 8px; }
+      h2 { margin-top: 22px; margin-bottom: 6px; }
+      li { margin-bottom: 0; line-height: 1.26; }
+      .summary { line-height: 1.3; }
+      .skills-compact { line-height: 1.32; }
+      .education { margin-bottom: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume">
+    <header class="resume-header">
+      <div class="header-main">
+        <h1>Josh Sternberg</h1>
+        <div class="subtitle">Senior UX Design Leader</div>
+      </div>
+      <div class="header-contact">
+        <div class="contact-info">
+          Seattle, Washington<br />
+          917.755.4441 | josh@jbsdesign.com<br />
+          <a href="https://www.linkedin.com/in/joshsternberg" target="_blank">linkedin.com/in/joshsternberg</a> |
+          <a href="http://www.jbsdesign.com" target="_blank">jbsdesign.com</a>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <p class="summary">
+        Senior UX design leader with 20+ years of experience defining user experience strategy, leading large-scale consumer and platform initiatives, and building in-house design systems in highly matrixed, global organizations. At Amazon I led the Payments &amp; Wallet design team and previously served as a Principal UX Designer for Search and Home Innovation, where I set UX vision and roadmaps, influenced VP-level decision-making, and shipped data-heavy products used by hundreds of millions of customers. I enjoy connecting UX strategy to business goals, navigating complex ecosystems across web and app, and building inclusive, high-performing teams that can operate with both strategic depth and hands-on excellence.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="company-name">AMAZON</div>
+          <div class="job-details">April 2014 - January 2026</div>
+        </div>
+
+        <div class="subsection">
+          <div class="job-title">Senior Design Manager, Payments &amp; Wallet</div>
+          <div class="job-details">July 2022 - January 2026 | Seattle, Washington</div>
+          <ul>
+            <li>Led UX for Amazon’s payments and wallet ecosystem, including checkout, stored payment methods, and recurring payment flows across app, web, and device experiences.</li>
+            <li>Established UX strategy for payments experiences in partnership with product, engineering, risk, and finance leadership, translating regulatory, risk, and business objectives into customer-centered journeys and interaction patterns.</li>
+            <li>Influenced senior executive decision-making through clear narratives, prototypes, and data-backed UX recommendations, helping shape multi-year roadmaps for payments and wallet.</li>
+            <li>Owned and evolved an in-house design system for payments (patterns, components, interaction guidelines) used across multiple product teams, keeping design and code aligned and improving execution speed and consistency.</li>
+            <li>Allocated design resources across initiatives and ensured teams stayed focused on the highest-impact problems, balancing short-term delivery with long-term platform improvements.</li>
+            <li>Mentored and supported designers across levels, modeling inclusive leadership, high-quality craft, and a learning mindset in day-to-day work.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <div class="job-title">Principal UX Designer, Home Innovation &amp; Search</div>
+          <div class="job-details">September 2021 - July 2022 | Seattle, Washington</div>
+          <ul>
+            <li>Set UX vision and strategy for the Product Discovery vertical (home and furniture), defining future-state journeys across search, browse, and recommendations.</li>
+            <li>Partnered with senior product and engineering leaders to align UX direction with business strategy, using research, experimentation, and data to influence priorities.</li>
+            <li>Designed and launched an AI-driven visual shopping experience that enabled customers to shop directly from lifestyle imagery, serving as first inventor on a granted US patent.</li>
+            <li>Defined and scaled UX patterns and design system elements for discovery experiences, ensuring consistency across teams while allowing for innovation.</li>
+            <li>Provided thought leadership and mentorship to other designers, acting as a go-to partner for complex interaction and information architecture decisions.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <div class="job-title">Senior UX Designer, Retail &amp; Devices</div>
+          <div class="job-details">October 2018 - September 2021 | Seattle, Washington</div>
+          <ul>
+            <li>Led UX for reorder and replenishment experiences (Virtual Dash Buttons, Subscribe &amp; Save) across mobile, desktop, and device surfaces, focusing on simple, reliable recurring purchase flows.</li>
+            <li>Worked across product, engineering, marketing, and operations to ship cross-channel experiences that balanced customer convenience, partner needs, and business outcomes.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <div class="job-title">User Experience Designer, Vendor Tools</div>
+          <div class="job-details">April 2014 - October 2018 | Seattle, Washington</div>
+          <ul>
+            <li>Designed enterprise-style tools for vendors to manage selection, pricing, inventory, and performance, working in a matrixed environment with product, engineering, and operations teams.</li>
+            <li>Handled UX end-to-end: workflow analysis, interaction design, visual design, and collaboration with engineering for implementation.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Design Leadership, Culture &amp; Mentorship</div>
+          <ul>
+            <li>Co-founded and facilitated "Drawing After Dark," Amazon’s longest-running internal design meetup, building a culture of craft, curiosity, and cross-team collaboration.</li>
+            <li>Mentored designers, researchers, and content partners on UX strategy, interaction design, and communication, supporting career growth and advancement into senior roles.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="company-name">MICROSOFT</div>
+          <div class="job-title">User Experience Designer</div>
+          <div class="job-details">May 2008 - March 2014 | Redmond, Washington</div>
+        </div>
+        <ul>
+          <li>Led UX for Microsoft’s global online support experience and MSDN homepage, designing information-dense UIs, navigation, and content structures for technical users.</li>
+          <li>Collaborated across product, engineering, and content to deliver high-scale consumer and B2B experiences.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="company-name">BOEING COMMERCIAL AIRPLANES</div>
+          <div class="job-title">Flash Developer &amp; E-Learning Course Designer</div>
+          <div class="job-details">August 2005 - May 2008 | Seattle, Washington</div>
+        </div>
+        <ul>
+          <li>Designed and developed interactive training for Boeing 787 engineers, translating complex technical systems into clear, learnable experiences.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Patents</h2>
+      <div class="patent">
+        <div class="patent-title">Visual Search and Content Display System</div>
+        <div class="patent-details">US Patent No. 12,154,021 | Granted November 26, 2024 | First Inventor</div>
+      </div>
+      <div class="patent">
+        <div class="patent-title">Displaying Actionable Graphical User Interface (GUI) Objects on a Page with a Particular Actionable GUI Object in a Modal Window</div>
+        <div class="patent-details">US Patent No. 10,860,181 B1 | Granted December 8, 2020 | Co-Inventor</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skills-compact">
+        <div><strong>UX Strategy &amp; Executive Influence:</strong> Setting UX vision and strategy for large consumer and platform products; aligning UX initiatives with business goals; influencing VP and senior leadership decisions through clear narratives and data.</div>
+        <div><strong>Complex Ecosystems &amp; Design Systems:</strong> Experience with multi-surface app ecosystems (web, app, device); creating and governing in-house design systems across teams and codebases; managing onboarding, recurring flows, and identity-related experiences.</div>
+        <div><strong>Team Leadership &amp; Mentorship:</strong> Leading, developing, and advancing high-performing UX teams; resource allocation; coaching designers and cross-functional partners; modeling inclusive, learning-focused leadership.</div>
+        <div><strong>Fintech &amp; P2P Context:</strong> Deep experience in payments, recurring purchases, and financial workflows; understanding of risk, compliance, and data considerations when designing money-moving experiences.</div>
+        <div><strong>Communication &amp; Execution:</strong> Exceptional communication and presentation skills; comfortable in highly matrixed environments; hands-on, roll-up-your-sleeves mindset with strong interaction and visual design craft.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="education">
+        <div class="education-school">Tufts University / School of the Museum of Fine Arts</div>
+        <div class="education-degree">Bachelor of Fine Arts (B.F.A.) in Animation and Painting</div>
+        <div class="education-years">1996 - 2000</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

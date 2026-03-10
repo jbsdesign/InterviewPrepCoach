@@ -11,25 +11,82 @@ type CurrentUser = {
 };
 
 const primaryButtonClasses =
-  "flex w-full items-center justify-center rounded-xl bg-zinc-900 px-3 py-2.5 text-sm font-medium text-zinc-50 transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-zinc-300";
+  "flex w-full items-center justify-center rounded-full bg-[linear-gradient(to_right,#3b587a,#4f6f92)] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(15,23,42,0.3)] ring-1 ring-slate-200/70 transition transform hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(15,23,42,0.4)] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 dark:bg-[linear-gradient(to_right,#020617,#111827)] dark:ring-zinc-700";
 
 function AuthBackground() {
   return (
     <>
+      {/* Deep space base gradient */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-900 via-slate-950 to-indigo-950"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,#0f172a,#020617_55%),radial-gradient(circle_at_100%_0%,#020617,#020617_55%),radial-gradient(circle_at_50%_120%,#020617,#020617_65%)]"
+      />
+
+      {/* Primary aurora sheet */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-[-26%] rounded-[5rem] bg-[radial-gradient(circle_at_0%_0%,rgba(56,189,248,0.6),transparent_55%),radial-gradient(circle_at_100%_0%,rgba(59,130,246,0.55),transparent_60%),radial-gradient(circle_at_0%_100%,rgba(129,140,248,0.6),transparent_60%),radial-gradient(circle_at_100%_100%,rgba(45,212,191,0.55),transparent_55%)] mix-blend-screen blur-2xl"
+        initial={{ x: "-8%", y: "-6%", rotate: -8, scale: 0.96, opacity: 0.9 }}
+        animate={{
+          x: ["-8%", "10%", "4%", "-6%", "-8%"],
+          y: ["-6%", "6%", "-2%", "4%", "-6%"],
+          rotate: [-8, 6, -3, 4, -8],
+          scale: [0.96, 1.05, 1.02, 1, 0.96],
+          opacity: [0.85, 1, 0.9, 0.95, 0.85],
+        }}
+        transition={{ duration: 32, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Secondary spectral ribbon */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-[-40%] rounded-[7rem] bg-[conic-gradient(from_210deg_at_10%_0%,rgba(56,189,248,0.15),rgba(59,130,246,0.55),rgba(56,189,248,0.5),rgba(37,99,235,0.5),rgba(56,189,248,0.15))] mix-blend-screen blur-3xl"
+        initial={{ x: "10%", y: "12%", rotate: 18, scale: 0.9, opacity: 0.8 }}
+        animate={{
+          x: ["10%", "-10%", "6%", "14%", "10%"],
+          y: ["12%", "-8%", "10%", "18%", "12%"],
+          rotate: [18, -14, 6, 14, 18],
+          scale: [0.9, 1.08, 1.02, 0.96, 0.9],
+          opacity: [0.8, 1, 0.9, 0.95, 0.8],
+        }}
+        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Floating plasma blobs for a lava lamp feel */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 top-[-10%] h-80 w-80 rounded-full bg-gradient-to-br from-emerald-400/70 via-cyan-400/60 to-sky-500/40 blur-3xl"
+        initial={{ scale: 0.9, x: -10, y: 0 }}
+        animate={{
+          scale: [0.9, 1.26, 1.08, 0.98, 0.9],
+          x: [-10, 8, -4, 4, -10],
+          y: [0, 64, -32, 40, 0],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-[-20%] rounded-[4rem] bg-[radial-gradient(circle_at_0%_0%,rgba(56,189,248,0.45),transparent_55%),radial-gradient(circle_at_100%_0%,rgba(59,130,246,0.4),transparent_60%),radial-gradient(circle_at_0%_100%,rgba(129,140,248,0.4),transparent_60%),radial-gradient(circle_at_100%_100%,rgba(56,189,248,0.45),transparent_55%)] mix-blend-screen"
-        initial={{ x: "-4%", y: "-3%", rotate: -4 }}
+        className="pointer-events-none absolute -right-40 bottom-[-14%] h-96 w-96 rounded-full bg-gradient-to-tr from-sky-500/65 via-blue-500/55 to-indigo-500/45 blur-3xl"
+        initial={{ scale: 1.02, x: 10, y: 0 }}
         animate={{
-          x: ["-4%", "4%", "-2%", "-4%"],
-          y: ["-3%", "3%", "1%", "-3%"],
-          rotate: [-4, 3, -1, -4],
+          scale: [1.02, 0.92, 1.2, 1.04, 1.02],
+          x: [10, -6, 4, 12, 10],
+          y: [0, -82, 30, -40, 0],
         }}
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Subtle vertical field lines */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-[-10%] inset-x-[-5%] bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.35),transparent_55%),radial-gradient(circle_at_80%_100%,rgba(59,130,246,0.35),transparent_55%)] opacity-60 mix-blend-screen"
+        initial={{ x: 0, y: 0, opacity: 0.5 }}
+        animate={{
+          x: [0, 12, -8, 0],
+          y: [0, -10, 6, 0],
+          opacity: [0.5, 0.8, 0.6, 0.5],
+        }}
+        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
       />
     </>
   );
@@ -39,7 +96,7 @@ function AuthLayout({ children, showSuccess }: { children: ReactNode; showSucces
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden font-sans">
       <AuthBackground />
-      <main className="relative z-10 w-full max-w-md rounded-3xl border border-white/30 bg-gradient-to-br from-white/95 via-white/85 to-white/95 p-6 sm:p-8 shadow-[0_22px_55px_rgba(15,23,42,0.55)] backdrop-blur-xl dark:border-zinc-700/80 dark:bg-gradient-to-br dark:from-zinc-900/95 dark:via-zinc-950/95 dark:to-black/90 max-h-[90vh] overflow-auto">
+      <main className="relative z-10 w-full max-w-md rounded-3xl border border-white/30 bg-gradient-to-br from-white/96 via-white/90 to-zinc-100 p-6 sm:p-7 shadow-[0_18px_40px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-zinc-700/80 dark:bg-gradient-to-br dark:from-zinc-950/95 dark:via-zinc-950/98 dark:to-black/95 max-h-[90vh] overflow-auto">
         {children}
       </main>
       {showSuccess && (
@@ -251,7 +308,7 @@ export default function Home() {
               Welcome back, {displayName}
             </h1>
             <p className="mx-auto max-w-xs text-sm text-zinc-700 dark:text-zinc-300">
-              You are already signed in. Pick up where you left off in your dashboard.
+              You are already signed in. Continue in your dashboard.
             </p>
           </div>
         </header>
@@ -271,16 +328,66 @@ export default function Home() {
 
   return (
     <AuthLayout showSuccess={showSuccess}>
-      <header className="mb-7 flex flex-col items-center gap-2 text-center">
-        <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/5 px-2.5 py-1 text-[11px] font-medium text-emerald-500 shadow-sm shadow-emerald-500/15">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(16,185,129,0.45)]" />
-          <span>AI powered interview prep</span>
+      <header className="mb-6 flex flex-col items-center gap-1.5 text-center">
+        <div className="pointer-events-none relative mb-1 inline-flex items-center justify-center px-2 py-1 text-[0.7rem] font-semibold uppercase">
+          {/* Soft static halo */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-4 h-6 -z-20 rounded-full bg-emerald-500/10 dark:bg-emerald-400/8 blur-xl"
+          />
+          {/* Animated aura layers */}
+          <span
+            aria-hidden="true"
+            className="ai-aura-1 absolute -inset-x-8 top-0 h-8 -z-30 rounded-full bg-gradient-to-r from-emerald-400/30 via-sky-300/24 to-emerald-400/30 blur-3xl dark:from-emerald-300/24 dark:via-sky-400/18 dark:to-emerald-300/24"
+          />
+          <span
+            aria-hidden="true"
+            className="ai-aura-2 absolute -inset-x-10 top-1 h-9 -z-30 rounded-full bg-gradient-to-r from-sky-400/22 via-indigo-400/18 to-sky-400/22 blur-3xl dark:from-sky-300/24 dark:via-indigo-300/20 dark:to-sky-300/24"
+          />
+          {/* Thin energy line */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-8 h-px -z-10 bg-gradient-to-r from-transparent via-emerald-500/70 dark:via-emerald-300/70 to-transparent"
+          />
+          <span className="relative flex items-center justify-center">
+            {/* Light mode text: darker, higher contrast */}
+            <span
+              className="dark:hidden"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, #059669, #2563eb, #1d4ed8)",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                letterSpacing: "0.35em",
+                textShadow: "0 0 1px rgba(15,23,42,0.7)",
+                opacity: 1,
+              }}
+            >
+              AI POWERED
+            </span>
+            {/* Dark mode text: lighter neon */}
+            <span
+              className="hidden dark:inline"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, rgba(167,243,208,0.9), rgba(125,211,252,0.9), rgba(165,180,252,0.9))",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                letterSpacing: "0.35em",
+                textShadow:
+                  "0 0 8px rgba(56,189,248,0.55), 0 0 16px rgba(45,212,191,0.4)",
+                opacity: 0.88,
+              }}
+            >
+              AI POWERED
+            </span>
+          </span>
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-3xl">
+        <h1 className="text-[26px] font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-[30px]">
           Interview Prep Coach
         </h1>
         <p className="mx-auto max-w-sm text-sm text-zinc-700 dark:text-zinc-300">
-          Turn messy prep into focused, daily practice tailored to your next role.
+          Turn scattered prep into focused daily practice for your next role.
         </p>
       </header>
 
@@ -458,32 +565,42 @@ export default function Home() {
       <div className="mt-6 space-y-4">
         <div className="space-y-1 text-center text-xs text-zinc-500 dark:text-zinc-400">
           {isSignUp && (
-            <p>Already have an account? Use the Sign in tab above.</p>
+            <p>Already have an account? Switch to the Sign in tab.</p>
           )}
           <p>By continuing, you agree to the Terms and Privacy Policy.</p>
         </div>
 
         {isSignUp && (
-          <div className="rounded-2xl border border-zinc-200/80 bg-white/70 p-3 text-xs text-zinc-700 shadow-sm backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-zinc-200">
-            <p className="mb-2 font-medium text-zinc-900 dark:text-zinc-50">What you get</p>
-            <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-              <li className="flex items-center gap-2">
-                <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400">
+          <div className="mt-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-4 text-[0.78rem] text-zinc-700 shadow-sm backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-200">
+            <div className="mb-2">
+              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                What you get
+              </p>
+            </div>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400">
                   ✓
                 </span>
-                <span>Daily question sets tuned to your role.</span>
+                <span>A clear interview prep plan.</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/10 text-[10px] text-sky-600 dark:text-sky-400">
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400">
                   ✓
                 </span>
-                <span>Structured feedback to close real gaps.</span>
+                <span>Mock interviews with AI interviewers.</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500/10 text-[10px] text-indigo-600 dark:text-indigo-400">
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400">
                   ✓
                 </span>
-                <span>Lightweight mock interviews you can run any time.</span>
+                <span>Quick feedback and practical tips.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400">
+                  ✓
+                </span>
+                <span>A history of your questions, notes, and progress.</span>
               </li>
             </ul>
           </div>

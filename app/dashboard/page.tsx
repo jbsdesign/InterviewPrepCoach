@@ -55,7 +55,7 @@ export default async function DashboardPage() {
 
   if (!profile) {
     return (
-      <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
+      <div className="flex min-h-screen flex-col bg-[radial-gradient(circle_at_top,_#dbeafe,_transparent_55%),radial-gradient(circle_at_bottom,_#bbf7d0,_transparent_55%)] font-sans dark:bg-[radial-gradient(circle_at_top,_#0f172a,_#020617_65%),radial-gradient(circle_at_bottom,_#0b1120,_#020617_70%)]">
         <header className="border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
           <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
             <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
         </header>
 
         <main className="mx-auto flex w-full max-w-5xl flex-1 px-4 py-8">
-          <div className="w-full rounded-2xl bg-white p-6 shadow-sm dark:bg-zinc-950">
+          <div className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
             <OnboardingWizard initialName={displayName} />
           </div>
         </main>
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-[radial-gradient(circle_at_top,_#dbeafe,_transparent_55%),radial-gradient(circle_at_bottom,_#bbf7d0,_transparent_55%)] font-sans dark:bg-[radial-gradient(circle_at_top,_#0f172a,_#020617_65%),radial-gradient(circle_at_bottom,_#0b1120,_#020617_70%)]">
       <header className="relative z-40 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
           <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -86,8 +86,8 @@ export default async function DashboardPage() {
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8 gap-6">
-        <section className="px-1">
-          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <section className="px-1 mb-3">
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-4xl">
             Welcome back, {displayName}
           </h1>
         </section>
